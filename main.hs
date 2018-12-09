@@ -45,7 +45,20 @@ convCell 1 = "#"
 -- 01以外だとエクセプション
 
 renderWorld :: World -> IO()
-renderWorld a = putStrLn $ concatMap convLine a
+renderWorld a = putStrLn $ concatMap convLine a 
+
+--マップの座標
+type Point = (Int, Int)
+
+--わたしを移動
+moveMe :: World -> Point -> String
+moveMe a (x, y) = w
+        -- where w = splitAt 5 (getWorldStr a)
+        where w = "helpme"
+
+getWorldStr :: World -> String
+getWorldStr a = concatMap convLine a 
+
 
 --ゲームはじまり!
 main = do
