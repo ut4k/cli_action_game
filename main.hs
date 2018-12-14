@@ -1,8 +1,16 @@
 data Cell = Wall Int Int
           | Road Int Int
+          deriving (Show)
 
 type World = [Cell]
 type WorldWidth = Int
+type Player = String
+type Point = (Int, Int)
+
+data Foo = Foo Int Int --test
+
+player :: String -> String
+player c = c
 
 world1 = [
            (Wall 0 0), (Wall 0 1) , (Wall 0 2), (Wall 0 3), (Wall 0 4)
@@ -23,9 +31,21 @@ worldToCharList w = map cell w
 -- 2. map anonymous function which takes (val, index) as a parameter
 -- 3. use if condition to identify N-th element
 -- TODO インデックス貼る以外の方法あるんじゃない?...
-renderLine :: [String] -> String
-renderLine c = concat $ map (\(x, idx) -> if idx `mod` 5 == 0 then x++"\n" else x) indexed
+-- 実際はeditというより新しいリストを返してる、すべてイミュータブルだから。
+parseWorld :: [String] -> String
+parseWorld c = concat $ map (\(x, idx) -> if idx `mod` 5 == 0 then x++"\n" else x) indexed
     where indexed = zip c [1..]
 
+render :: World -> String
+render w = parseWorld $ worldToCharList w
+
+getCell :: World -> Int -> Cell
+getCell w n = w!!n
+
+updateWorld :: World -> a -> String
+updateWorld w a = undefined
+        --TODO search Cells in the World and replace it, then return new world
+
 main :: IO()
-main = putStrLn $ renderLine $ worldToCharList world1
+main = putStrLn $ parseWorld $ worldToCharList world1
+    where me = player "@"
