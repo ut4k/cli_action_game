@@ -1,65 +1,18 @@
-import Data.Ord
-import Data.List
-import Control.Monad
+data Cell = Wall Int Int
+          | Road Int Int
 
---わたし
-me :: String
-me = "@"
+type World = [Cell]
 
---壁と道は0か1で判断、
---でも敵とかトゲの概念が出てきたらどうする?
---2,3,4と種別を増やす?...
-
-type MapCell = Int
-
---マップ全体
-type World = [[MapCell]]
-
---ステージ1とする
-world1 :: World
 world1 = [
-          [1,1,1,1,1]
-         ,[0,0,0,0,0]
-         ,[1,1,1,1,1]
+          (Wall 0 0), (Wall 0 1) , (Wall 0 2), (Wall 0 3), (Wall 0 4), (Wall 0 5),
+          (Road 1 0), (Road 1 1) , (Road 1 2), (Road 1 3), (Road 1 4), (Road 1 5),
+          (Wall 2 0), (Wall 2 1) , (Wall 2 2), (Wall 2 3), (Wall 2 4), (Wall 2 5)
          ]
 
---まさに見た目通り
---壁壁壁壁壁
---道道道道道
---壁壁壁壁壁
+cell :: Cell -> String 
+cell (Wall x y) = "#"
+cell (Road x y) = " "
 
---ワールドのリストの中で最長のリストの数 -> 最大画面幅
---ワールドのリストの数 -> 最大画面高さ
-getScreenSize :: World -> (Int, Int)
-getScreenSize a = (maxX, maxY)
-    where maxX = length $ maximumBy (comparing length) a
-          maxY = length a
-
-convLine :: [MapCell] -> String
-convLine a = concat $ map convCell a ++ ["\n"]
--- 最後の"\n"いらない
-
-convCell :: MapCell -> String
-convCell 0 = " "
-convCell 1 = "#"
--- 01以外だとエクセプション
-
-renderWorld :: World -> IO()
-renderWorld a = putStrLn $ concatMap convLine a 
-
---マップの座標
-type Point = (Int, Int)
-
---わたしを移動
-moveMe :: World -> Point -> String
-moveMe a (x, y) = w
-        -- where w = splitAt 5 (getWorldStr a)
-        where w = "helpme"
-
-getWorldStr :: World -> String
-getWorldStr a = concatMap convLine a 
-
-
---ゲームはじまり!
-main = do
-       renderWorld world1
+main :: IO()
+main =
+        print $ map cell world1
