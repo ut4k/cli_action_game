@@ -1,16 +1,15 @@
+import System.IO
+-- import System.Console.ANSI --TODO cabal(stack) install ansi-terminal
+
 data Cell = Wall Int Int
           | Road Int Int
+          | Player Int Int
           deriving (Show)
 
 type World = [Cell]
 type WorldWidth = Int
 type Player = String
 type Point = (Int, Int)
-
-data Foo = Foo Int Int --test
-
-player :: String -> String
-player c = c
 
 world1 = [
            (Wall 0 0), (Wall 0 1) , (Wall 0 2), (Wall 0 3), (Wall 0 4)
@@ -21,6 +20,7 @@ world1 = [
 cell :: Cell -> String
 cell (Wall x y) = "#"
 cell (Road x y) = "."
+cell (Player x y) = "@"
 
 worldToCharList :: World -> [String]
 worldToCharList w = map cell w
@@ -42,10 +42,21 @@ render w = parseWorld $ worldToCharList w
 getCell :: World -> Int -> Cell
 getCell w n = w!!n
 
-updateWorld :: World -> a -> String
-updateWorld w a = undefined
-        --TODO search Cells in the World and replace it, then return new world
+--リストのインデックスで置き換えたら座標の意味がないやんけ!
+updateWorld :: World -> Int -> Cell -> String
+updateWorld w n c = render $ replaceNth n c w
+
+--コピペ
+replaceNth :: Int -> a -> [a] -> [a]
+replaceNth _ _ [] = []
+replaceNth n newVal (x:xs)
+ | n == 0 = newVal:xs
+ | otherwise = x:replaceNth (n-1) newVal xs
 
 main :: IO()
-main = putStrLn $ parseWorld $ worldToCharList world1
-    where me = player "@"
+main = do
+    -- clearScreen
+    putStrLn $ parseWorld $ worldToCharList world1
+    putStrLn $ updateWorld world1 5 (Player 0 0)
+    putStrLn $ updateWorld world1 6 (Player 0 0)
+    putStrLn $ updateWorld world1 7 (Player 999 999)
